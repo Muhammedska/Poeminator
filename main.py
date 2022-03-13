@@ -16,6 +16,7 @@ soup = BeautifulSoup(r.content, "html.parser")
 PoemLinks = []
 PoetristList = []
 allPoem = []
+lux = []
 
 table = soup.find('ul', attrs={'class': 'isairler'})
 founded = 1
@@ -27,7 +28,7 @@ for row in table.findAll('li'):
 founded = 1
 for i in PoetristList:
     url = i
-  
+
     r = requests.get(url, verify=False)
     soup = BeautifulSoup(r.content, "html.parser")
 
@@ -37,7 +38,7 @@ for i in PoetristList:
     founded = 1
     for row in table.findAll('li'):
         PoemLinks.append(row.a['href'])
-        print('We Found {} Poem'.format(founded))
+
         os.system('cls' if os.name == 'nt' else 'clear')
         founded += 1
     for m in PoemLinks:
@@ -45,7 +46,14 @@ for i in PoetristList:
         r = requests.get(url, verify=False)
         soup = BeautifulSoup(r.content, "html.parser")
         table = soup.find('pre', attrs={'class': 'stext'})
-        PoemGenie.append(table.text)
+        try:
+            PoemGenie.append(table.text)
+            lux.append(table.text)
+        except AttributeError:
+            pass
     allPoem.append([url.replace("http://siir.me/",''),PoemGenie])
-for i in allPoem:
-    print(i)
+    print(len(allPoem),' all the poem ')
+file = open('poems.txt','w',encoding='UTF-8')
+for i in lux:
+    print(i.encode('utf-8'))
+    file.write(i)
